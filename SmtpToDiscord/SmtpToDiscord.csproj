@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <UserSecretsId>dotnet-SmtpToDiscord-D67DD63C-B006-4649-8C12-EE741B7F7C7A</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Discord.Net.Webhook" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0" />
+        <PackageReference Include="MimeKit" Version="2.6.0" />
+        <PackageReference Include="SmtpServer" Version="7.0.0" />
+    </ItemGroup>
+</Project>
