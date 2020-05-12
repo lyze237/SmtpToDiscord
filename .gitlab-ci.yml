@@ -1,6 +1,5 @@
-image: mcr.microsoft.com/dotnet/core/sdk:3.1
-
 build:
+    image: mcr.microsoft.com/dotnet/core/sdk:3.1
     only:
         - master
     artifacts:
@@ -10,6 +9,8 @@ build:
         - dotnet publish -c Release -o publish
 
 build-win:
+    tags:
+        - windows
     only:
         - master
     artifacts:
@@ -19,6 +20,7 @@ build-win:
         - dotnet publish -p:PublishTrimmed=true -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained -r win-x64 -c Release -o publish
 
 build-lin:
+    image: mcr.microsoft.com/dotnet/core/sdk:3.1
     only:
         - master
     artifacts:
