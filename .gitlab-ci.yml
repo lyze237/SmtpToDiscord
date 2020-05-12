@@ -4,7 +4,25 @@ build:
     only:
         - master
     artifacts:
-        path:
+        paths: 
             - publish/
     script:
-        - dotnet publish -c Release -o ../publish SmtpToDiscord/SmtpToDiscord.csproj
+        - dotnet publish -c Release -o publish
+
+build-win:
+    only:
+        - master
+    artifacts:
+        paths:
+            - publish/
+    script:
+        - dotnet publish -p:PublishTrimmed=true -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained -r win-x64 -c Release -o publish
+
+build-lin:
+    only:
+        - master
+    artifacts:
+        paths:
+            - publish/
+    script:
+        - dotnet publish -p:PublishTrimmed=true -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained -r linux-x64 -c Release -o publish
