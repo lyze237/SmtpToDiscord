@@ -1,8 +1,10 @@
-A really basic smtp -> discord webhook program.
+# Overview
 
-It redirects all emails received on port 25 to a discord webhook.
+The program redirects all emails received on port 25 to a discord webhook.
 
-Simply add the webhook to `appsettings.json`:
+# Settings
+
+Add the webhook url to `appsettings.json`:
 
 ```json
 {
@@ -16,3 +18,7 @@ Simply add the webhook to `appsettings.json`:
   "Webhook": "https://discordapp.com/api/webhooks/..."
 }
 ```
+
+# Example:
+
+![example image](images/example.png)
