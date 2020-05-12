@@ -1,0 +1,10 @@
+image: mcr.microsoft.com/dotnet/core/sdk:3.1
+
+build:
+    only:
+        - master
+    artifacts:
+        path:
+            - publish/
+    script:
+        - dotnet publish -c Release -o ../publish SmtpToDiscord/SmtpToDiscord.csproj
