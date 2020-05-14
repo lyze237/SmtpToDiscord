@@ -11,4 +11,8 @@
         <PackageReference Include="MimeKit" Version="2.6.0" />
         <PackageReference Include="SmtpServer" Version="7.0.0" />
     </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Properties\launchSettings.json" />
+    </ItemGroup>
 </Project>

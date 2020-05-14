@@ -1,9 +1,12 @@
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Webhook;
 using Microsoft.Extensions.Logging;
+using MimeKit;
 using SmtpServer;
 using SmtpServer.Mail;
 using SmtpServer.Protocol;
@@ -26,15 +29,42 @@ namespace SmtpToDiscord
             
             var content = MimeKit.MimeMessage.Load(message.Content);
             logger.LogInformation($"{content.From}\t{content.Subject}");
-            
-            webhook.SendMessageAsync("", false, new[] { 
+
+
+            var embeds = new[] { 
                 new EmbedBuilder()
-                .WithAuthor(content.From.ToString())
-                .WithTitle(content.Subject)
-                .WithDescription(content.TextBody)
-                .WithCurrentTimestamp()
-                .Build()
-            });
+                    .WithAuthor(content.From.ToString())
+                    .WithTitle(content.Subject)
+                    .WithDescription(content.TextBody)
+                    .WithCurrentTimestamp()
+                    .Build()
+            };
+            
+            webhook.SendMessageAsync("", false, embeds);
+            
+            
+            foreach (var attachment in content.Attachments)
+            {
+                Thread.Sleep(1000);
+                
+                using var stream = new MemoryStream();
+                string fileName;
+                    
+                if (attachment is MessagePart rfc822)
+                {
+                    fileName = rfc822.ContentDisposition?.FileName ?? "attached-message.eml";
+                    rfc822.Message.WriteTo(stream, cancellationToken);
+                }
+                else
+                {
+                    var part = (MimePart) attachment;
+                    fileName = part.FileName;
+                    part.Content.DecodeTo(stream, cancellationToken);
+                }
+                
+                stream.Seek(0, SeekOrigin.Begin);
+                webhook.SendFileAsync(stream, fileName, "");
+            }
             
             return Task.FromResult(SmtpResponse.Ok);
         }
