@@ -27,9 +27,14 @@ namespace SmtpToDiscord
             if (!(transaction.Message is ITextMessage message))
                 return Task.FromResult(SmtpResponse.ServiceReady);
             
-            var content = MimeKit.MimeMessage.Load(message.Content);
+            var content = MimeMessage.Load(message.Content);
             logger.LogInformation($"{content.From}\t{content.Subject}");
 
+            if (content.From.ToString().Contains("ups") && content.Subject.Contains("Daily Report"))
+            {
+                logger.LogInformation($"Ignoring message since it's a boring daily report");
+                return Task.FromResult(SmtpResponse.Ok);
+            }
 
             var embeds = new[] { 
                 new EmbedBuilder()
@@ -41,7 +46,6 @@ namespace SmtpToDiscord
             };
             
             webhook.SendMessageAsync("", false, embeds);
-            
             
             foreach (var attachment in content.Attachments)
             {
